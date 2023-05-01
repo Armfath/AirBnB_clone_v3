@@ -39,12 +39,12 @@ def delete_a_state(state_id):
 def add_a_state():
     from models.state import State
     """Add a state to storage"""
-    try:
-        data = request.get_json()
-    except:
-        abort(400, description='Not a JSON')
-    if 'name' not in data.keys():
-        abort(400, description='Missing name')
+    if not request.get_json():
+        abort(400, description="Not a JSON")
+
+    if 'name' not in request.get_json():
+        abort(400, description="Missing name")
+    data = request.get_json()
     obj = State(**data)
     storage.new(obj)
     storage.save()
