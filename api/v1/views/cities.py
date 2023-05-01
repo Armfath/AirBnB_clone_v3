@@ -43,8 +43,8 @@ def delete_a_city(city_id):
 @app_views.route('/states/<state_id>/cities', methods=['POST'],
                  strict_slashes=False)
 def add_a_city(state_id):
-    """Add a state to storage"""
-    from models.state import City
+    """Add a city related a state to storage"""
+    from models.city import City
     if not storage.get("State", state_id):
         abort(404)
     if not request.get_json():
@@ -79,4 +79,4 @@ def update_a_city(city_id):
         setattr(storage.all()[k], 'updated_at', datetime.utcnow())
         storage.save()
     updated_city = storage.get("City", city_id)
-    return jsonify(updated_city.to_dict())
+    return jsonify(updated_city.to_dict()), 200

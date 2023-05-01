@@ -41,9 +41,9 @@ def add_a_state():
     """Add a state to storage"""
     if not request.get_json():
         abort(400, description="Not a JSON")
-
     if 'name' not in request.get_json():
         abort(400, description="Missing name")
+
     data = request.get_json()
     obj = State(**data)
     storage.new(obj)
@@ -59,14 +59,18 @@ def update_a_state(state_id):
         abort(404)
     if not request.get_json():
         abort(400, description="Not a JSON")
-
     if 'name' not in request.get_json():
         abort(400, description="Missing name")
-    data = request.get_json()
 
+    data = request.get_json()
+    static = ['id', 'created_at', 'updated_at']
+    data_to_use = {k: v for k, v in data.items() if k not in static}
     k = "State" + "." + state_id
-    setattr(storage.all()[k], 'name', data.get('name'))
-    setattr(storage.all()[k], 'updated_at', datetime.utcnow())
+    if data_to_use:
+        for d in data_to_use:
+            setattr(storage.all()[k], d, data_to_use.get(d))
+        setattr(storage.all()[k], 'updated_at', datetime.utcnow())
+        storage.save()
     storage.save()
     updated_state = storage.get("State", state_id)
-    return jsonify(updated_state.to_dict())
+    return jsonify(updated_state.to_dict()), 200
