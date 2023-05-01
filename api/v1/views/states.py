@@ -42,9 +42,9 @@ def add_a_state():
     try:
         data = request.get_json()
     except:
-        abort(400, 'Not a JSON+')
+        abort(400, description='Not a JSON')
     if 'name' not in data.keys():
-        abort(400, 'Missing name+')
+        abort(400, description='Missing name')
     obj = State(**data)
     storage.new(obj)
     storage.save()
@@ -60,9 +60,9 @@ def update_a_state(state_id):
     try:
         data = request.get_json()
     except:
-        abort(400, 'Not a JSON+')
+        abort(400, description='Not a JSON')
     if 'name' not in data.keys():
-        abort(400, 'Missing name+')
+        abort(400, description='Missing name')
 
     k = "State" + "." + state_id
     setattr(storage.all()[k], 'name', data.get('name'))
