@@ -9,7 +9,7 @@ from flask import jsonify, abort, request
 @app_views.route('/amenities', methods=['GET'],
                  strict_slashes=False)
 def get_all_amenities():
-    """Retrieves the list of all Amenity objects of a State"""
+    """Retrieves the list of all Amenity objects"""
     amenities = storage.all("Amenity")
     list_amenities = [amenity.to_dict()
                       for amenity in amenities.values()]
@@ -41,7 +41,7 @@ def delete_a_amenity(amenity_id):
 @app_views.route('/amenities', methods=['POST'],
                  strict_slashes=False)
 def add_a_amenity():
-    """Add a state to storage"""
+    """Add an amenity to storage"""
     from models.amenity import Amenity
     if not request.get_json():
         abort(400, description="Not a JSON")
