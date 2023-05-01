@@ -57,12 +57,12 @@ def update_a_state(state_id):
     state = storage.get("State", state_id)
     if not state:
         abort(404)
-    try:
-        data = request.get_json()
-    except:
-        abort(400, description='Not a JSON')
-    if 'name' not in data.keys():
-        abort(400, description='Missing name')
+    if not request.get_json():
+        abort(400, description="Not a JSON")
+
+    if 'name' not in request.get_json():
+        abort(400, description="Missing name")
+    data = request.get_json()
 
     k = "State" + "." + state_id
     setattr(storage.all()[k], 'name', data.get('name'))
